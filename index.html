@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- no cache headers -->
+
+<!-- Mirrored from ams.americancollege.edu.in/ams/index.php by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Feb 2025 15:12:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="no-cache">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- end no cache headers -->
+
+<!-- bootstrap model link -->
+<!-- CSS only -->
+<link href="../../cdn.jsdelivr.net/npm/bootstrap%405.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+<!-- JavaScript Bundle with Popper -->
+<script src="../../cdn.jsdelivr.net/npm/bootstrap%405.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+</script>
+
+<head>
+    <title>The American College</title>
+
+
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/login_css/bootstrap.min1.css">
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="index.html">
+    <link rel="stylesheet" type="text/css" href="css/util1.css">
+    <link rel="stylesheet" type="text/css" href="css/main1.css">
+    <link href="plugins/font-awesome/css/font1.css" rel="stylesheet">
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script language="javascript" src="validate_api.js"></script>
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="vendor/animsition/js/animsition.min.js"></script>
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/daterangepicker/moment.min.js"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"></script>
+    <script src="js/main.js"></script>
+
+</head>
+<style>
+    .blinking {
+        animation: blinkingText 1.2s infinite;
+    }
+
+    @keyframes blinkingText {
+        0% {
+            color: yellow;
+        }
+
+        49% {
+            color: yellow;
+        }
+
+        60% {
+            color: transparent;
+        }
+
+        99% {
+            color: transparent;
+        }
+
+        100% {
+            color: yellow;
+        }
+    }
+
+    p {
+
+        font-family: Poppins-Regular;
+        font-size: 14px;
+        line-height: 1.7;
+        color: #fff;
+
+    }
+</style>
+<script>
+    $(document).ready(function() {
+$("#forgetshowornot").hide();
+        $('#log_btn_otp').hide();
+        $('#loadingImgotp').hide();
+        var parameter = new Array(
+            ["user_name", "custom", 'err_msg', 'Invalid User name #$#Enter Your User Name', '', '', ''],
+            ["pswd", "custom", 'err_msg', 'Invalid Password #$#Enter your password', '', '', '']
+        );
+
+
+
+        $(document).ready(function() {
+
+
+            if ($('#sel_usertype').val() == 3) {
+                $('#pswd').prop('placeholder', 'Password (Roll No)');
+            } else if ($('#sel_usertype').val() == 4) {
+                $('#pswd').prop('placeholder', 'Password - DOB (DD-MM-YYYY)');
+            } else {
+                $('#pswd').prop('placeholder', 'Password');
+                //$('#pswd').prop('placeholder','Password-DOB(DDMMYYYY)');
+                //  $('#pswd').prop('placeholder','Password (Roll No)');
+            }
+        });
+
+
+
+
+        // STATR ::: OTP SEND FORM ::://
+        $('body').on('click', '#submit_frm', function() {
+
+            var user_type = $('#sel_usertype').val();
+
+            if (user_type == 3 || user_type == 4)
+
+            {
+
+
+                if (validate('login_forms', parameter, 'yellow', 'one') == true) {
+
+                    $("#preloader1").show();
+                    $("#loadingImg").show();
+                    $("#err_msg").html();
+                    $.ajax({
+                        type: "POST",
+                        url: 'includes/login_student_and_staffAjx.php',
+                        data: $("#login_forms").serialize() + "&btn=login",
+                        //data: $("#login_forms").serialize(), 
+                        dataType: 'JSON',
+                        success: function(data) {
+
+                            //alert(data.rn);
+                            $('#preloader1').hide();
+                            $("#loadingImg").hide();
+
+                            if (data.error ==0) {
+
+                              $('#err_msg').html("Invalid user name and password");
+
+                            }
+							else if (data.error ==2) {
+								
+								alert(data.reason);
+                             // $('#err_msg').html("As you have  <b>"+data.reason+"</b> from the college, you cannot log in.");
+
+                            }
+                            else if(data.error ==3)
+                            {
+                                 $('#err_msg').html("Please Enter Valid Password..!");
+
+                            }
+                            else
+                            {
+
+                                if(data.staff_log==1)
+                                {
+                                    window.location = 'index.html';
+                                }
+                                else
+                                {
+                                var studentemail = data.rollno.concat(
+                                    "@americancollege.edu.in");
+                                if (data.rn > 19 && data.change_password_stu==0) {
+                                    alert("A OTP has been sent to your email id ".concat(
+                                            studentemail)
+                                        .concat(
+                                            "\nIf not recevied, check spam folder also."
+                                        ));
+                                    // window.location = "loginnewotp.php" +
+                                    //     "?student_rollno=" + data.rollno;
+
+                                    $("#login_div").hide();
+                                    $("#log_user").hide();
+                                    $("#log_pass").hide();
+                                    $("#log_btn").hide();
+                                    $("#log_btn1").hide();
+                                    $("#log_otp").show();
+                                    $("#log_btn_otp").show();
+                                    $("#log_btn1otp").show();
+                                    $("#log_otp_message").show();
+                                    CountDown(90, $('#display'));
+                                } else {
+
+                                    window.location = 'index.html';
+                                }
+                                }
+                            } 
+                        }
+                    });
+                }
+                return false;
+
+            } else {
+                $('#err_msg').html(
+                        "<font color='red' style='font-weight:bold'>Invalid User Type!!!!</font>")
+                    .show()
+                    .fadeOut(2000);
+            }
+        });
+
+        // END  ::: SEND OTP :::    
+
+        // verify otp start
+
+        // click action verify otp
+        // $('body').on('click', '#submit_frm_otp', function() {
+
+
+
+
+
+
+
+ $("#user_name123").on('keyup paste', function() {
+
+
+            var user_name = $("#user_name").val();
+
+            var user_name = $("#user_name").val().length;
+
+            //alert(otp_count);
+  $('#cbcs_err').html("");
+            if (user_name >= 5) {
+                //  alert(user_otp);
+                // $("#preloader1").show();
+                //  $("#loadingImg").show();
+                $("#err_msg").html();
+                $.ajax({
+                    type: "POST",
+                    url: 'includes/login_student_and_staffAjx.php',
+                    data: $("#login_forms").serialize() + "&btn=roll_check_msg",
+                    //data: $("#login_forms").serialize(), 
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if (data== 1) {
+
+                           $('#cbcs_err').html(
+                                "<font class='blinking' color='yellow' style='font-weight:bold'>Please Check Your CBCS Courses..!</font>"
+                            );
+                          }
+                        else {
+                            
+                        }
+                    }
+                });
+            } else {
+
+                
+            }
+            return false;
+        });
+
+
+        $("#otp").on('keyup paste', function() {
+
+
+            var user_otp = $("#otp").val();
+
+            var otp_count = $("#otp").val().length;
+
+            //alert(otp_count);
+
+            if (otp_count == 6) {
+                //  alert(user_otp);
+                $("#preloader1").show();
+                //  $("#loadingImg").show();
+                $("#err_msg").html();
+                $.ajax({
+                    type: "POST",
+                    url: 'includes/login_student_and_staffAjx.php',
+                    data: $("#login_forms").serialize() + "&btn=otp",
+                    //data: $("#login_forms").serialize(), 
+                    dataType: 'JSON',
+                    success: function(data) {
+                        if (data.error == 1) {
+                            window.location = 'index.html';
+                        } else if (data.error == 4) {
+                            alert("invalid otp");
+                            $('#err_msg').html(
+                                "<font color='white' style='font-weight:bold'>INVALID OTP CODE !</font>"
+                            ).show().fadeOut(3000);
+                        } else {
+                            alert("invalid otp");
+                            $('#err_msg').html(
+                                '<font color="red" style="font-weight:bold">Invalid OTP Code Try Again..!</font>'
+                            ).show().fadeOut(4000);
+                            $("#reenter_pass_tr").hide();
+                            $("#new_pass_tr").hide();
+                            $("#sub_btn").hide();
+                            //$("#otp_gentd").hide();
+                            $("#otp").show();
+                        }
+                    }
+                });
+            } else {
+
+                $("#otpcode").show();
+                $('#err_msg').html(
+                        "<font color='red' style='font-weight:bold'>ENTER VALID OTP CODE!</font>")
+                    .show().fadeOut(2000);
+
+            }
+            return false;
+        });
+        // verify otp end
+
+
+
+        // STATR ::: OTP RESEND FORM ::://
+        $("#submit_frm_re").on('click', function() {
+            // alert*"dfdfsdfsfdf";
+            //    if(validate('login_forms',parameter,'yellow','one')==true)
+            //      { 
+            $("#preloader1").show();
+            $("#loadingImgotp").show();
+            $("#err_msg").html();
+            $.ajax({
+                type: "POST",
+                url: 'includes/login_student_and_staffAjx.php',
+                data: $("#login_forms").serialize() + "&btn=login_reset",
+                //data: $("#login_forms").serialize(), 
+                dataType: 'JSON',
+                success: function(data) {
+                    $('#resent').hide();
+                    $('#preloader1').hide();
+                    $("#loadingImgotp").hide();
+                    if (data.error == 1) {
+                        var studentemail = data.rollno.concat(
+                            "@americancollege.edu.in");
+                        if (data.rn > 19) {
+                            alert("A OTP has been sent to your email id ".concat(
+                                    studentemail)
+                                .concat(
+                                    "\nIf not recevied, check spam folder also."
+                                ));
+
+
+
+                            $("#log_btn_otp").show();
+                            $("#log_btn1otp").show();
+                            $("#log_otp_message").show();
+                            $('#sel_usertype').hide();
+                            $('#log_user').hide();
+                            $('#log_pass').hide();
+                            $('#submit_frm_re').hide();
+
+
+
+                            $('#log_btn').hide();
+                            $('#log_btn1').hide();
+
+                            $("#log_otp").show();
+
+                            CountDown1(90, $('#display1'));
+                        } else {
+                            window.location = 'index.html';
+                        }
+                    } else {
+                        $('#err_msg').html("Invalid user name and password");
+                    }
+                }
+            });
+            //}
+
+        });
+
+        // END  ::: RESEND OTP :::
+
+
+        $('#sel_usertype').on('change', function() {
+			$("#user_name").val("");
+			$("#forgetshowornot").hide();
+			$("#pswd").val("");
+            var AdminId = this.value;
+            if (AdminId == 11) {
+                $("#dobDisplay").fadeIn('slow', function() {});
+            } else {
+                $("#dobDisplay").fadeOut('slow', function() {});
+            }
+        });
+        //$("#user_name").on('keyup paste', function() {
+          //  $(this).val($(this).val().toUpperCase());
+          //  $("#err_msg").html("");
+       // });
+	  // $("#user_name").on('blur', function() {
+		//    var usertypeval=$('#sel_usertype').val();
+			
+	   //});
+        $("#user_name").on('keyup paste', function() {
+			  $(this).val($(this).val().toUpperCase());
+			  $("#forgetshowornot").hide();
+			  var usertypeval=$('#sel_usertype').val();
+            if (usertypeval == 0) {
+                alert('Select User Type');
+                $('#user_name').val("");
+                $('#pswd').val("");
+                $("#err_msg").html("");
+				
+            }
+			else
+			{
+				if(usertypeval=='3')
+		   {
+				$.ajax({
+                type: "POST",
+                url: 'includes/login_student_and_staffAjx.php',
+                data: $("#login_forms").serialize() + "&btn=getstuupdateornot",
+                //data: $("#login_forms").serialize(), 
+                dataType: 'JSON',
+                success: function(data) 
+				{
+					if(data=='1')
+					{
+						$("#forgetshowornot").show();
+					}
+					else
+					{
+						$("#forgetshowornot").hide();
+					}
+
+				}
+				});
+		   }
+		   else
+		   {
+			   $("#forgetshowornot").hide();
+		   }
+				  
+			}
+        });
+        $("#pswd").on('keyup paste', function() {
+            if ($('#sel_usertype').val() == 0) {
+                alert('Select User Type');
+                $('#user_name').val("");
+                $('#pswd').val("");
+                $("#err_msg").html("");
+            }
+            $(this).val($(this).val().toUpperCase());
+        });
+        $("#reset_frm").on('click', function() {
+            $('#user_name').val("");
+            $('#pswd').val("");
+            $("#err_msg").html("");
+        });
+
+        $(".toggle-password").click(function() {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $('#pswd').val();
+            var x = document.getElementById("pswd");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        });
+
+
+        $('#sel_usertype').change(function() {
+            //alert($(this).val());
+            if ($(this).val() == 3) {
+                $('#pswd').prop('placeholder', 'Password (Roll No)');
+            } else if ($(this).val() == 4) {
+                $('#pswd').prop('placeholder', 'Password- DOB (DD-MM-YYYY)');
+
+            } else {
+                $('#pswd').prop('placeholder', 'Password');
+            }
+
+        });
+
+
+
+        $("#show").click(function() {
+
+            var x = document.getElementById("pswd");
+
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        });
+
+
+
+
+
+        function SubmitFunction() {
+            $('form').submit();
+
+        }
+
+
+
+        jQuery(document).ready(function($) {
+
+            $(window).load(function() {
+                $('#preloader').fadeOut('slow', function() {
+                    $(this).remove();
+                });
+            });
+
+        });
+
+
+    });
+
+    function CountDown(duration, display1) {
+
+        $('#re_se').hide();
+        if (!isNaN(duration)) {
+            var timer = duration,
+                minutes, seconds;
+
+            var interVal = setInterval(function() {
+                minutes = parseInt(timer / 60, 0);
+                seconds = parseInt(timer % 60, 0);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                $('#display').html("<b>Please Wait...  " + minutes + "m : " + seconds + "s" + "</b>");
+                if (--timer < 0) {
+                    $('#display').hide();
+                    $('#resent').show();
+                    $('#re_se').show();
+                    $('#log_btn_otp').hide();
+                    $('#log_btn1otp').hide();
+                    $("#display").html("");
+                    // $( "#submit_frm_re" ).trigger( "click" );
+                }
+            }, 1000);
+        }
+    }
+
+    function CountDown1(duration, display1) {
+
+        $('#re_se').hide();
+        $('#log_btn_otp').show();
+        $('#log_btn1otp').show();
+        if (!isNaN(duration)) {
+            var timer1 = duration,
+                minutes, seconds;
+
+            var interVal = setInterval(function() {
+                minutes = parseInt(timer1 / 60, 10);
+                seconds = parseInt(timer1 % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                $('#display1').html("<b>Please Wait...  " + minutes + "m : " + seconds + "s" + "</b>");
+
+                if (--timer1 < 0) {
+                    timer1 = 0;
+                    $("#display1").html("");
+                    $('#display1').hide();
+                    $('#resent').show();
+                    $('#re_se').show();
+                    location.reload(true);
+                    alert("Please try after some time");
+                    location.reload();
+                    
+                    // $( "#submit_frm_re" ).trigger( "click" );
+                }
+
+
+            }, 1000);
+        }
+    }
+</script>
+<style>
+    .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 20px;
+        height: 20px;
+        -webkit-animation: spin 2s linear infinite;
+        /* Safari */
+        animation: spin 2s linear infinite;
+    }
+
+
+    /* Safari */
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .js div#preloader {
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        background: url('images/ajax-loader-3.gif') no-repeat center center;
+    }
+</style>
+
+<body>
+
+
+    <div class="js">
+
+        <body>
+            <span id="preloader" style="display:none;">
+                <div id="preloader123"></div>
+            </span>
+    </div>
+
+    <div class="limiter">
+        <div class="container-login100" style="background-image: url('images/amc.jpg');">
+            <div class="wrap-login100">
+                <form class="login100-form validate-form" name='login_forms' id='login_forms' role='form' method="post" action="post.php">
+                    <span class="login100-form-logo">
+                        <img src="images/aclogin_logofinal_new.png" class="img-responsive" alt="Cinque Terre" width="120"
+                            height="120">
+                    </span>
+
+                    <span class="login100-form-title p-b-34 p-t-27">
+                        Login
+                    </span>
+
+
+                    <div id="login_div" name="login_div">
+<span id="cbcs_err" name="cbcs_err"> </span>
+                        <select name="sel_usertype" id="sel_usertype" class="form-control selectpicker"
+                            style="margin-bottom:10px;">
+                                                        <!--<option value=2 selected>Staff</option>-->
+                                                       <option value=0 >Select</option>
+                            <option value=3>Student</option>
+                            <option value=4>Parent</option>
+                                                        <!--<option value=>-->
+                            <!-- one line removed, the remove line is american college details file in winways folder -->
+                                                    </select>
+
+                        <!-- rollno input -->
+                        <div class="wrap-input100 validate-input" data-validate="Enter username" id="log_user">
+                            <font style="color:white"><img class="avatar" src="images/login1.svg" alt=""
+                                    style="width: 20px;position: absolute;top: 30%;"></font>
+                            <input class="input100 custom_login_input" type="text" name="user_name" id="user_name" placeholder="Username"
+                                tabindex="1" autocomplete="off">
+                            <!--<span class="focus-input100" data-placeholder="&#xf207;"></span>-->
+                        </div>
+
+                        <!-- password input -->
+                        <div class="wrap-input100 validate-input" data-validate="Enter password" id='log_pass'>
+                            <font style="color:white"><img class="avatar" src="images/lock1.svg" alt=""
+                                    style="width: 20px;position: absolute;top: 20%;"></font>
+                            <input class="input100 custom_login_input" type="password" name="pswd" id="pswd" placeholder="Password"
+                                tabindex="2" autocomplete="off">
+                            <!--<span class="focus-input100" data-placeholder="&#xf191;"></span>-->
+                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"
+                                style="color: white;opacity: 0.4;float: right;clear: both;height: 24px;top: -3px;width: 24px;margin-top: -25px;cursor:pointer"></span>
+                            <input type="hidden" type="text" id="ip_client" name="ip_client" value="">
+                        </div>
+
+                        <div id="forgetshowornot1">
+                            <a href="forgtpaswrd.html" style="color: #fff">Forgot Password?</a>
+                        </div>
+                      <!--   <div id="forgetshowornot">
+                            <a href="reset_password.php" style="color: #fff">Forgot Password?</a>
+                        </div> -->
+                      <div id="forgetshowornot">
+                            <a href="forgtpaswrd.html" style="color: #fff">Forgot Password?</a>
+                        </div>
+
+                        <div>
+                            <a href="how_to_reset_password.pdf" target="blank" style="font-weight:bold;font-size:16px;color: #fff">Click to know how to reset your password</a>
+                        </div>
+
+                        <div class="contact100-form-checkbox">
+                            <font></font>
+                            <!--<label class="" for="ckb1">
+                            <h5 style="color:#FFFF;">Ex: (DD-MM-YYYY) (10-10-2000)</h5><br>
+                            <h5 style="color:#FFFF;"> </h5>
+                        </label>-->
+
+                            <!--<input type="checkbox"  id="show" ><font color="white">Show Password</font>
+                  -->
+                            <span id='err_msg'></span>
+                        </div>
+
+                        <!-- login page buttons -->
+
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+
+
+                        <div style="display: flex; justify-content: center; flex-wrap: wrap;">
+
+                        <div class="btn btn-group" id="log_btn">
+							<a href="post.php">
+                            <button type="submit" class="login100-form-btn" name="submit_frm" id="submit_frm"
+                                tabindex="3">Login
+                            </button>
+							</a>
+                        </div>
+                        
+                        <div class="btn btn-group" id="log_btn1">
+                            <button type="button" class="login100-form-btn" name="reset_frm" id="reset_frm"
+                                tabindex="4">Reset
+                            </button>
+                        </div>
+
+
+                        </div>
+
+                        <span id='loadingImg' style="margin-bottom:10px;display:none;">
+                            <img src='images/loadingImg.gif'></span>
+
+
+
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+
+                    <div class="wrap-login100" id="log_otp_message" style="display:none;">
+
+                        <p style="color:#fff;">For your security,</p>
+                        <p style="color:#fff;">we need to verify your identity. </p>
+                        <p style="color:#fff;">We've sent an OTP to the mailid <span id="mobile_code"></span></p>
+                        <p style="color:#fff;"> Please enter it below to complete verification.</p>
+
+                    </div>
+
+                    <!-- email otp input -->
+                    <div class="wrap-input100 validate-input" data-validate="Enter OTP" id='log_otp'
+                        style="display: none;">
+                        <font style="color:white"><img class="avatar" src="images/lock1.svg" alt=""
+                                style="width: 20px;position: absolute;top: 20%;"></font>
+                        <input class="input100" type="text" name="otp" id="otp" placeholder="Enter OTP" tabindex="3"
+                            autocomplete="off" maxlength="6" onchange="myFunction()">
+                    </div>
+
+
+
+
+                    <!-- otp page buttons -->
+                    <!--         <div class="btn btn-group" id="log_btn_otp">
+                        <button type="" class="login100-form-btn" name="submit_frm" id="submit_frm_otp"
+                            tabindex="3">Verify
+
+                        </button>
+                    </div> -->
+                   
+                    <!--         <div class="btn btn-group" id="log_btn1otp" style="display: none;">
+                        <button type="button" class="login100-form-btn" name="reset_frm" id="reset_frm"
+                            tabindex="4">Reset</button>
+                    </div> -->
+
+
+                    <div id="re_se">
+                        <div class="btn btn-group" id="resent" style="display:none;border:0px;text-align:center">
+                            <button type="button" class="login100-form-btn" name="submit_frm_re" id="submit_frm_re"
+                                tabindex="3">Resend OTP
+
+                            </button>
+                        </div>
+                    </div>
+
+                    <span id='err_msg'></span>
+
+                    <div class="wrap-input100 validate-input" style="border:0px;text-align:center">
+                        <a href="index_student_and_staff4031.html?m=1&amp;page=forgot">
+                            <font color='white' size=4><b>
+                                    <div id="display"></div>
+
+                                </b></font>
+                        </a>
+                        <font color='white' size=4><b>
+                                <div id="display1"></div>
+
+                            </b></font></a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+
+<!-- Mirrored from ams.americancollege.edu.in/ams/index.php by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 05 Feb 2025 15:13:01 GMT -->
+</html>
